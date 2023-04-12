@@ -1,0 +1,43 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eks-example
+  namespace: eks-example
+  labels:
+    app: eks-example
+  annotations:
+    # Container Image Automated Updates
+    flux.weave.works/automated: "Ture" //*TO-DO*
+spec:
+  replicas: 1 //*To-DO*
+  selector:
+    matchLabels:
+      app: eks-example
+  template:
+    metadata:
+      labels:
+        app: eks-example
+    spec:
+      containers:
+      - name: eks-example
+        image: 382641897001.dkr.ecr.us-east-2.amazonaws.com/eks-example:6fba9291
+        imagePullPolicy: IfNotPresent
+                resources:
+          requests: 
+            memory: "64Mi" //*TO-DO*
+            cpu: "200m" //*TO-DO*
+          limits:
+            memory: "64Mi"
+            cpu: "400m"
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
